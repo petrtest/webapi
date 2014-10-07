@@ -1,47 +1,251 @@
 FORMAT: 1A
-HOST: http://www.google.com
 
-# WebAPI
-Notes API is a *short texts saving* service similar to its physical paper presence on your table.
+# Banking Services
 
-# Group Notes
-Notes related resources of the **Notes API**
 
-## Notes Collection [/notes]
-### List all Notes [GET]
-+ Response 200 (application/json)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
+## Profile [/netbanking/my/profile]
 
-### Create a Note [POST]
-+ Request (application/json)
-
-        { "title": "Buy cheese and bread for breakfast." }
-
-+ Response 201 (application/json)
-
-        { "id": 3, "title": "Buy cheese and bread for breakfast." }
-
-## Note [/notes/{id}]
-A single Note object with all its details
-
-+ Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Note to perform action with. Has example value.
-
-### Retrieve a Note [GET]
-+ Response 200 (application/json)
-
-    + Header
-
-            X-My-Header: The Value
++ Model
 
     + Body
 
-            { "id": 2, "title": "Pick-up posters from post-office" }
+            {
+                "firstname": "Max", //the first name
+                "lastname": "Mustermann",
+                "alias": "Mustermann1",
+                "customerId": "ABC1234567890123",
+                "instituteId": 188,
+                "offlineKey": "a1b2c3d4567891234567891234567890",
+                "supportCategory": "Premium",
+                "marketingInfoAcceptance": "ACCEPTED",
+                "gender": "MALE",
+                "lastlogin": "2013-11-28T16:18:10Z"
+            }
 
-### Remove a Note [DELETE]
-+ Response 204
+### Get basic information about the user the provided authorization token belongs to / represents. [GET]
+PROFILE object containing basic "netbanking" configuration information about the user.
+
+**Authorization**: Authorization token (OAuth 2.0 Bearer).
+
+#### Error codes
+No call-specific error codes.
+
++ Response 200 (application/json)
+
+    [Profile][]
+
+### This endpoint can be used to update of the user profile. [POST]
+The resource addressed by the endpoint represents a change-request for a user profile. The resource is a signable resource (See [Signable resources](#signable-resources)). To apply the changes to the actual user profile the signing-worflow has to be finished successfully.
+
+**Authorization**: Authorization token (OAuth 2.0 Bearer).
+
+#### Editable Fields
+Not all fields of a (PROFILE) object can be edited by the client. Changes on not editable fields are ignored (No error message is returned). The following fields are editable: 
+#### Error codes
+
+error code             | scope                     | purpose
+---------------------- | ------------------------- | ----------------------------
+`INVALID`              | `marketingInfoAcceptance` | Only `ACCEPTED` and `NOT_ACCEPTED` valid
+
++ Request
+
+    [Profile][]
+
++ Response 200 (application/json)
+
+    [Profile][]
+
+
+
+
+
+
+
+## Logininfo [/netbanking/my/profile/logininfo]
+
+
+### Get basic information about the user the provided authorization token belongs to / represents. [GET]
+A (PROFILE) object (with the difference that at "lastlogin" all available lastLogin dates are displayed as well as the channel of the respective dates)  containing basic "netbanking" configuration information about the user.
+
+**Authorization**: Authorization token (OAuth 2.0 Bearer).
+
+#### Error codes
+No call-specific error codes.
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "firstname": "Visa-Alfred",
+                "lastname": "Netbanking",
+                "alias": "NETBANKVI3",
+                "customerId": "BE56D15479BFA514",
+                "instituteId": 188,
+                "offlineKey": "59d2aa3e15fa69efe4756ac9dcfa5867",
+                "supportCategory": "Standard",
+                "marketingInfoAcceptance": "NOT_ACCEPTED",
+                "gender": "MALE",
+                "lastlogin": [
+                    {
+                        "channel": "MB",
+                        "lastlogin": "2014-01-23T11:38:52Z"
+                    },
+                    {
+                        "channel": "VS",
+                        "lastlogin": "2013-04-03T06:17:32Z"
+                    },
+                    {
+                        "channel": "NB",
+                        "lastlogin": "2014-02-18T08:37:09Z"
+                    },
+                    {
+                        "channel": "MB",
+                        "lastlogin": "2014-01-23T11:38:52Z"
+                    },
+                    {
+                        "channel": "NB",
+                        "lastlogin": "2014-01-07T15:04:15Z"
+                    }
+                ]
+            }
+            
+            
+            
+## Contacts [/netbanking/my/profile/contacts]
+
++ Model
+
+    + Body
+
+            {
+                "address": [
+                    {
+                        "id": "CB4A17822810730C",
+                        "type": "PERMANENT_RESIDENCE",
+                        "typeI18N": "Hauptwohnsitz",
+                        "street": "Landstrasse 55",
+                        "zipCode": "1050",
+                        "city": "Wien",
+                        "country": "AT",
+                        "flags": [
+                            "mailingAddress",
+                            "mainContact",
+                            "editable"
+                        ]
+                    }
+                ],
+                "phone": [
+                    {
+                        "id": "CB4A17822810730C",
+                        "type": "PRIVATE",
+                        "typeI18N": "Privat",
+                        "countryCallingCode": "0043",
+                        "areaCallingCode": "911",
+                        "phoneNumber": "xxxxxx789",
+                        "reachableFrom": "00:00",
+                        "reachableUntil": "00:00",
+                        "flags": [
+                            "mainContact",
+                            "mobile",
+                            "editable",
+                            "deletable"
+                        ]
+                    }
+                ],
+                ...
+            }
+
+### Get user contact information - address, phone, email fax. [GET]
+A (CONTACTS) object containing user contact information.
+
+**Authorization**: Authorization token (OAuth 2.0 Bearer).
+
+#### Error codes
+No call-specific error codes.
+
++ Response 200 (application/json)
+
+    [Contacts][]
+
+### This endpoint can be used to trigger the creation of a new contact information entry or to update or delete an existing one. [POST]
+The resource addressed by the endpoint represents a change-, create- or delete-request for a contact information entry.
+
+The resource is a signable resource (See [Signable resources](#signable-resources)). To apply the changes to the actual contacts the signing-worflow has to be finished successfully.     
+  
+If on the passed (CONTACTS) the "deleted"-flag is set, the order is interpreted as delete-request.
+
+If the passed (CONTACTS) does not contain the "deleted"-flag and the "id" field is empty the order is interpreted as create-request.
+
+If the passed (CONTACTS) does not contain the "deleted"-flag and the "id" field references an already existing (CONTACTS) the order is interpreted as change-request.
+
+**Authorization**: Authorization token (OAuth 2.0 Bearer).
+
+#### Parameters
+
+**JSON-Payload**: A (CONTACTS) object with exactly one contact entry.
+
+#### Reply
+
+The (CONTACTS) object and an orderId.
+
+### Error codes
+
+error code                    | scope                    | purpose
+----------------------------- | ------------------------ | ------------------------------------------------------------------------------------------
+`TOO_MANY_ENTRIES`            |                          | Exactly one contact information entry (address, phone, email fax) can be managed at once.
+`ZIPCODE_DOES_NOT_MATCH_CITY` | `zipCode`                | Zip code and city must match.
+`VALUE_INVALID`               | `street`                 | Either street or postbox can be entered.
+`VALUE_INVALID`               | `postBox`                | Either street or postbox can be entered.
+`CONTACT_NOT_DELETABLE`       |                          | Contact entry can not be deleted.
+`CONTACT_NOT_EDITABLE`        |                          | Contact entry can not be updated.
+`FIELD_INVALID`               | `addresses.country (AT)` | Only AT allowed.
+
++ Request
+
+    [Contacts][]
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "address": [
+                    {
+                        "type": "SECONDARY_RESIDENCE",
+                        "street": "Graben 1",
+                        "zipCode": "1010",
+                        "city": "Wien",
+                        "country": "AT",
+                        "flags": [
+                            "editable"
+                        ]
+                    }
+                ],
+                "orderId": "043911565060000006006630"
+            }
+        
+
+            
+## ContactsSign [/netbanking/my/orders/profile/contacts/{ID}/sign]
+
+Endpoints implementing the signing-workflow according to chapter [Signable resources](#signable-resources).
+
+error code               | scope              | purpose
+------------------------ | ------------------ | ----------------------------
+`ID_NOT_FOUND`           | `signingRequestId` | order does not exist (signingRequest is a synonym for order; may be renamed in a further version)
+`SIGNING_REQUEST_EXPIRED`| `signingRequestId` | order expired
+
+#### TAC SMS
+
+In case a TAC SMS is sent, the standard SMS format generated by the EBV for sign requests is used.            
+
+### Endpoints implementing the signing-workflow according to chapter Signable resources. [GET]
++ Response 200
+
+### Endpoints implementing the signing-workflow according to chapter Signable resources. [POST]
++ Response 200
+
+### Endpoints implementing the signing-workflow according to chapter Signable resources. [PUT]
++ Response 200
