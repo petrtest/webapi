@@ -5,6 +5,74 @@ FORMAT: 1A
 ## CZ_endpoint [/netbanking/my/someEndpoint/CZ]
 
 
+
+## ExampleDomesticPayment [/netbanking/domesticpayment/]
+
++ Model
+
+    + Body
+
+            {
+                "amount": "123,50",
+                "currency": "CZK",
+                "sender": "Max Mustermann",
+                "bank_code": "0800",
+                "constant_symbol": 0508,
+                "variable_symbol": "123456789",
+                "cz-new_attribute": "example_value",
+            }
+
+### This is an example request to show possibilities of central and lokal API specification/documentation [GET]
+EXAMPLE_PAYMENT object containing information about domestic payment.
+
+**Authorization**: Authorization token (OAuth 2.0 Bearer).
+
+#### Error codes
+No call-specific error codes.
+
++ Response 200 (application/json)
+
+    [ExampleDomesticPayment][]
+
+### This endpoint can be used to update of the user profile. [POST]
+The resource addressed by the endpoint represents a change-request for a example payment. The resource is a signable resource (See [Signable resources](#signable-resources)). To apply the changes to the actual user profile the signing-worflow has to be finished successfully.
+
+**Authorization**: Authorization token (OAuth 2.0 Bearer).
+
+#### Usage of the interface
+All countries
+
+#### Attribute usage
+
+attribute        |  existence  
+-----------------|-------------
+amount           |     all     
+currency         |     all     
+sender           |     all     
+bank_code        |     CZ      
+constant_symbol  |     CZ,SK   
+variable_symbol  |     CZ,SK   
+
+#### Error codes
+
+error code             | scope                     | purpose
+---------------------- | ------------------------- | ----------------------------
+`INVALID`              | `someExampleScope       ` | Some example purpose
+
++ Request
+
+    [ExampleDomesticPayment][]
+
++ Response 200 (application/json)
+
+    [ExampleDomesticPayment][]
+
+
+
+
+
+
+
 ## Profile [/netbanking/my/profile]
 
 + Model
