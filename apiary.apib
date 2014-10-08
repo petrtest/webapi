@@ -7,6 +7,8 @@ FORMAT: 1A
 
 ## ExampleDomesticPayment [/netbanking/domesticpayment/]
 
+#### Used by: All countries
+
 + Model
 
     + Body
@@ -37,19 +39,16 @@ The resource addressed by the endpoint represents a change-request for a example
 
 **Authorization**: Authorization token (OAuth 2.0 Bearer).
 
-#### Usage of the interface
-All countries
-
 #### Attribute usage
 
-attribute        |  existence  
------------------|-------------
-amount           |     all     
-currency         |     all     
-sender           |     all     
-bank_code        |     CZ      
-constant_symbol  |     CZ,SK   
-variable_symbol  |     CZ,SK   
+attribute        |  country   |  mandatority
+-----------------|------------|-----------------
+amount           |     all    |   M
+currency         |     all    |   M
+sender           |     all    |   M
+bank_code        |     CZ     |   CZ:M
+constant_symbol  |     CZ,SK  |   CZ:O, SK:O
+variable_symbol  |     CZ,SK  |   CZ:O, SK:O
 
 #### Error codes
 
