@@ -2,11 +2,12 @@ FORMAT: 1A
 
 # Banking Services
 
-## CZ_endpoint [/netbanking/my/someEndpoint/CZ]
 
 
 
 ## ExampleDomesticPayment [/netbanking/domesticpayment/]
+
+#### Used by: All countries
 
 + Model
 
@@ -19,7 +20,6 @@ FORMAT: 1A
                 "bank_code": "0800",
                 "constant_symbol": 0508,
                 "variable_symbol": "123456789",
-                "cz-new_attribute": "example value"
             }
 
 ### This is an example request to show possibilities of central and lokal API specification/documentation [GET]
@@ -39,34 +39,16 @@ The resource addressed by the endpoint represents a change-request for a example
 
 **Authorization**: Authorization token (OAuth 2.0 Bearer).
 
-#### Usage of the interface
-All countries
-
 #### Attribute usage
 
-attribute        |  existence  
------------------|-------------
-amount           |     all     
-currency         |     all     
-sender           |     all     
-bank_code        |     CZ      
-constant_symbol  |     CZ,SK   
-variable_symbol  |     CZ,SK   
-cz-new_attribute |     CZ      
-
-
-#### Attribute Description
-
-attribute        | mandatority   | description
------------------|---------------|---------------
-amount           |   M           |  ...          
-currency         |   M           |  ...             
-sender           |   M           |  ...             
-bank_code        |   M           |  ...             
-constant_symbol  |   O           |  ...             
-variable_symbol  |   O           |  ...             
-cz-new_attribute |   M           |  ...             
-
+attribute        |  country   |  mandatority
+-----------------|------------|-----------------
+amount           |     all    |   M
+currency         |     all    |   M
+sender           |     all    |   M
+bank_code        |     CZ     |   CZ:M
+constant_symbol  |     CZ,SK  |   CZ:O, SK:O
+variable_symbol  |     CZ,SK  |   CZ:O, SK:O
 
 #### Error codes
 
@@ -97,7 +79,6 @@ error code             | scope                     | purpose
             {
                 "firstname": "Max", //the first name
                 "lastname": "Mustermann",
-                "rodnecislo": "800101/1234" //example of local specific attribute
                 "alias": "Mustermann1",
                 "customerId": "ABC1234567890123",
                 "instituteId": 188,
